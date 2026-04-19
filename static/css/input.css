@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+
+@theme {
+  --color-surface: #0b1326;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+  --color-primary: #4edea3;
+  --color-primary-container: #10b981;
+  --color-on-surface: #dae2fd;
+  --color-surface-variant: #2d3449;
+  --color-outline-variant: rgba(60, 74, 66, 0.15);
+  --color-secondary-container: #0566d9;
+  --color-on-secondary-container: #e6ecff;
+  --color-tertiary: #ffb95f;
+
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headline);
+  }
+}
+
+@layer components {
+  .glass-card {
+    background-color: color-mix(in srgb, var(--color-surface-container) 60%, transparent);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--color-outline-variant);
+  }
+  .btn-primary {
+    background: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-container));
+    color: var(--color-surface);
+    font-weight: bold;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+    transition-property: transform;
+    transition-duration: 150ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-primary:hover {
+    transform: scale(1.02);
+  }
+  .btn-primary:active {
+    transform: scale(0.95);
+  }
+}

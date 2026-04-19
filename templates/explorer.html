@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data Explorer | Emerald Horizon</title>
+<link href="/static/css/output.css" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card {
+            background: rgba(23, 31, 51, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/30 min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="bg-slate-950 text-[#10B981] font-plus-jakarta text-sm tracking-tight h-full w-64 fixed left-0 top-0 overflow-y-auto bg-gradient-to-r from-slate-900 to-[#0b1326] shadow-2xl shadow-black/50 z-50 flex flex-col p-6 space-y-8">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4edea3] to-[#10b981] flex items-center justify-center shadow-lg shadow-emerald-500/20">
+<span class="material-symbols-outlined text-slate-950 font-bold" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<h1 class="text-2xl font-black text-[#10B981] tracking-tighter leading-none">Precision</h1>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Greenhouse AI</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all flex items-center gap-3 px-4 py-3 rounded-lg group scale-95 active:scale-90 transition-transform" href="/">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all flex items-center gap-3 px-4 py-3 rounded-lg group scale-95 active:scale-90 transition-transform" href="/predictor">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">query_stats</span>
+<span>Yield Predictor</span>
+</a>
+<a class="text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all flex items-center gap-3 px-4 py-3 rounded-lg group scale-95 active:scale-90 transition-transform" href="/insights">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">psychology</span>
+<span>Model Insights</span>
+</a>
+<a class="bg-gradient-to-br from-[#4edea3] to-[#10b981] text-slate-950 font-bold rounded-lg shadow-lg shadow-emerald-500/20 flex items-center gap-3 px-4 py-3 group scale-95 active:scale-90 transition-transform" href="/explorer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+<span>Data Explorer</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-slate-800/50">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-slate-800 ring-2 ring-emerald-500/20">
+<img alt="Precision Ecosystem Logo" data-alt="professional corporate headshot of an agricultural data scientist with a confident expression in a modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2A1RWQ6TbzzZ18OwoesaIreeeFJit9LIq4NKEw-wkkFtob_S8rJQst-EvFZe3PCYtn993PeZ4x0-tz1L6RQRTkq1iQMVlygT98Mn-ChD11wy0ipsYcE-eCEqImn2N7NmHEB-31ZLRXgCcMn6h9wzNjnsqQ7PCYNqRXXInSOWNjfn-KhNmaDwm2QKqkyJAWW3xZKknCPcfvNNMULTZ2W-XXpeb93jEyUkvaOslz_PuVHJfHpROn84HFrzCh9l5CnuwcOHTchinnDeX"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-on-surface font-bold truncate">Dr. Aris Thorne</p>
+<p class="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Chief Agronomist</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="bg-slate-950/60 backdrop-blur-2xl sticky top-0 w-full z-40 bg-gradient-to-b from-slate-900/20 to-transparent shadow-sm shadow-emerald-500/5 flex items-center justify-between px-8 py-4 ml-64 max-w-[calc(100%-16rem)]">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative max-w-md w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-highest border-none rounded-full py-2.5 pl-12 pr-6 text-sm text-on-surface placeholder:text-slate-500 focus:ring-1 focus:ring-primary/40 transition-all backdrop-blur-md" placeholder="Search raw sensor logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-300 hover:bg-emerald-500/10 transition-all group active:scale-95">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-300 hover:bg-emerald-500/10 transition-all group active:scale-95">
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform">settings</span>
+</button>
+<div class="h-6 w-px bg-slate-800 mx-2"></div>
+<span class="font-plus-jakarta text-lg font-semibold text-[#10B981]">Emerald Horizon</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-[calc(100vh-80px)] space-y-10">
+<!-- Hero Header Section -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="space-y-2">
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface leading-none">
+                    Data Explorer
+                </h1>
+<p class="text-slate-400 max-w-lg font-medium">
+                    Navigate through granular agricultural datasets. Audit, filter, and extract raw sensor logs from the global greenhouse network.
+                </p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 bg-surface-container-highest text-on-surface px-5 py-2.5 rounded-xl font-semibold hover:bg-surface-bright transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">file_download</span>
+                    Export CSV
+                </button>
+<button class="flex items-center gap-2 bg-gradient-to-br from-[#4edea3] to-[#10b981] text-slate-950 px-5 py-2.5 rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">add_chart</span>
+                    Create Report
+                </button>
+</div>
+</section>
+<!-- Asymmetric Analysis Row -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Filtering Sidebar (Editorial Filter) -->
+<div class="lg:col-span-3 space-y-6">
+<div class="glass-card rounded-xl p-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary">Filters</h3>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-on-surface">tune</span>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Temporal Range</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm text-on-surface focus:ring-1 focus:ring-primary/40 py-2.5">
+<option>Last 30 Days</option>
+<option>Quarterly Analysis</option>
+<option>Year-to-Date</option>
+<option>Custom Range</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Field Location</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 group cursor-pointer">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest border-none text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm text-slate-300 group-hover:text-on-surface transition-colors">North Valley Sector</span>
+</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<input class="w-4 h-4 rounded bg-surface-container-lowest border-none text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm text-slate-300 group-hover:text-on-surface transition-colors">Delta Basin (Wetlands)</span>
+</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest border-none text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm text-slate-300 group-hover:text-on-surface transition-colors">Highland Plateau</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">pH Range Threshold</label>
+<input class="w-full accent-primary bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer" type="range"/>
+<div class="flex justify-between mt-2 text-[10px] text-slate-500 font-bold">
+<span>pH 4.0</span>
+<span>pH 9.0</span>
+</div>
+</div>
+<button class="w-full py-2.5 text-xs font-bold uppercase tracking-widest text-on-surface border border-outline-variant/30 rounded-lg hover:border-primary/40 hover:text-primary transition-all">
+                            Reset Parameters
+                        </button>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-gradient-to-br from-secondary-container/20 to-transparent border border-secondary-container/10">
+<span class="material-symbols-outlined text-secondary mb-3" style="font-variation-settings: 'FILL' 1;">info</span>
+<h4 class="text-sm font-bold text-on-surface mb-1">Data Quality Score</h4>
+<p class="text-xs text-slate-400 leading-relaxed">System confidence is currently at 98.4% based on active sensor calibration logs.</p>
+</div>
+</div>
+<!-- Distribution Charts (Bento Layout) -->
+<div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Yield Distribution Histogram -->
+<div class="glass-card rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-between min-h-[320px]">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Yield Distribution</h3>
+<p class="text-xs text-slate-500">Historical harvest density analysis</p>
+</div>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">NORMALIZED</span>
+</div>
+<!-- Mock Histogram Visualization -->
+<div class="flex-1 flex items-center justify-center h-40">
+<img src="/static/images/yield_distribution.png" alt="Yield Distribution" class="h-full w-auto rounded-lg shadow-lg">
+</div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-tighter mt-4">
+<span>Low Yield</span>
+<span>Median (4.2 t/h)</span>
+<span>High Yield</span>
+</div>
+</div>
+<!-- Feature Variance Box Plot -->
+<div class="glass-card rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-between min-h-[320px]">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Feature Variance</h3>
+<p class="text-xs text-slate-500">Sensor noise and deviation range</p>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</div>
+<div class="flex-1 flex items-center justify-center">
+<img src="/static/images/scatter_plots.png" alt="Feature Variance" class="w-full h-auto rounded-lg shadow-lg">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Professional Data Table -->
+<section class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold text-on-surface">Raw Agricultural Records</h2>
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold text-slate-400 border border-outline-variant/10">14,209 TOTAL ENTRIES</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">filter_alt</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">view_column</span>
+</button>
+</div>
+</div>
+<div class="glass-card rounded-xl border border-outline-variant/10 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-highest/50 border-b border-outline-variant/20">
+<tr>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">
+<div class="flex items-center gap-1 cursor-pointer group">
+                                    Date <span class="material-symbols-outlined text-xs group-hover:translate-y-0.5 transition-transform">expand_more</span>
+</div>
+</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Location</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Soil pH</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Moisture</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Temp (C)</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">
+<div class="flex items-center gap-1 cursor-pointer group justify-end">
+                                    Yield <span class="material-symbols-outlined text-xs group-hover:translate-y-0.5 transition-transform">expand_more</span>
+</div>
+</th>
+<th class="px-6 py-4 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10 text-sm font-medium">
+<!-- Row 1 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">14:02</span></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
+                                    North Valley-12
+                                </div>
+</td>
+<td class="px-6 py-4 text-slate-300">6.82</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 48%"></div>
+</div>
+<span class="text-xs text-slate-500">48%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-300">24.1°</td>
+<td class="px-6 py-4 text-right font-bold text-on-surface">4.82 t/h</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">13:58</span></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]"></div>
+                                    Delta Basin-A
+                                </div>
+</td>
+<td class="px-6 py-4 text-slate-300">5.91</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 72%"></div>
+</div>
+<span class="text-xs text-slate-500">72%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-300">22.8°</td>
+<td class="px-6 py-4 text-right font-bold text-on-surface">3.41 t/h</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">13:45</span></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
+                                    Highland-S
+                                </div>
+</td>
+<td class="px-6 py-4 text-slate-300">7.15</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 31%"></div>
+</div>
+<span class="text-xs text-slate-500">31%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-300">19.5°</td>
+<td class="px-6 py-4 text-right font-bold text-on-surface">5.19 t/h</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">13:30</span></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
+                                    North Valley-09
+                                </div>
+</td>
+<td class="px-6 py-4 text-slate-300">6.45</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 55%"></div>
+</div>
+<span class="text-xs text-slate-500">55%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-300">25.3°</td>
+<td class="px-6 py-4 text-right font-bold text-on-surface">4.60 t/h</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">13:12</span></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]"></div>
+                                    Delta Basin-C
+                                </div>
+</td>
+<td class="px-6 py-4 text-slate-300">5.20</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 88%"></div>
+</div>
+<span class="text-xs text-slate-500">88%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-slate-300">21.4°</td>
+<td class="px-6 py-4 text-right font-bold text-on-surface">2.95 t/h</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant/10 flex items-center justify-between">
+<p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Showing 1 to 5 of 14,209</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded-lg bg-primary text-slate-950 font-bold text-xs">1</button>
+<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">2</button>
+<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">3</button>
+<span class="text-slate-600 mx-1">...</span>
+<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">2842</button>
+<button class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Insights Footer Section -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+<div class="glass-card p-6 rounded-xl border border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Active Nodes</h4>
+<p class="text-2xl font-black text-on-surface">1,482</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">speed</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Sample Frequency</h4>
+<p class="text-2xl font-black text-on-surface">0.5 Hz</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">storage</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Volume</h4>
+<p class="text-2xl font-black text-on-surface">84.2 GB</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual FAB suppressed as per instruction for detail/data screens -->
+</body></html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yield Predictor | Emerald Horizon</title>
+<link href="/static/css/output.css" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(45, 52, 73, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: #171f33;
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4edea3;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(78, 222, 163, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="bg-slate-950 flex flex-col h-screen p-6 space-y-8 h-full w-64 fixed left-0 top-0 overflow-y-auto bg-gradient-to-r from-slate-900 to-[#0b1326] shadow-2xl shadow-black/50 z-50">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4edea3] to-[#10b981] flex items-center justify-center shadow-lg shadow-emerald-500/20">
+<span class="material-symbols-outlined text-slate-950 font-bold" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<h1 class="text-2xl font-black text-[#10B981] tracking-tighter leading-none">Precision</h1>
+<p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Greenhouse AI</p>
+</div>
+</div>
+<nav class="space-y-4">
+<a class="flex items-center px-4 py-3 space-x-3 text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all scale-95 active:scale-90 transition-transform" href="/">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-plus-jakarta text-sm tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 space-x-3 bg-gradient-to-br from-[#4edea3] to-[#10b981] text-slate-950 font-bold rounded-lg shadow-lg shadow-emerald-500/20 scale-95 active:scale-90 transition-transform" href="/predictor">
+<span class="material-symbols-outlined" data-icon="query_stats" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="font-plus-jakarta text-sm tracking-tight">Yield Predictor</span>
+</a>
+<a class="flex items-center px-4 py-3 space-x-3 text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all scale-95 active:scale-90 transition-transform" href="/insights">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-plus-jakarta text-sm tracking-tight">Model Insights</span>
+</a>
+<a class="flex items-center px-4 py-3 space-x-3 text-slate-400 hover:text-emerald-400 transition-colors duration-300 hover:bg-slate-800/50 transition-all scale-95 active:scale-90 transition-transform" href="/explorer">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-plus-jakarta text-sm tracking-tight">Data Explorer</span>
+</a>
+</nav>
+<div class="mt-auto pt-10">
+<div class="bg-surface-container-high/40 p-4 rounded-xl">
+<div class="text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-bold">System Status</div>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs text-on-surface-variant font-medium">AI Engine Online</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority: JSON) -->
+<header class="bg-slate-950/60 backdrop-blur-2xl sticky top-0 w-full z-40 flex items-center justify-between px-8 py-4 ml-64 bg-gradient-to-b from-slate-900/20 to-transparent shadow-sm shadow-emerald-500/5">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="search">search</span>
+<input class="bg-surface-container-highest/50 border-none rounded-full py-2.5 pl-12 pr-4 w-full text-sm text-on-surface placeholder:text-slate-500 focus:ring-1 focus:ring-primary/40 backdrop-blur-md" placeholder="Search field data or insights..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-4 mr-4">
+<button class="material-symbols-outlined text-slate-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-slate-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all" data-icon="settings">settings</button>
+<button class="material-symbols-outlined text-slate-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all" data-icon="help">help</button>
+</div>
+<div class="flex items-center space-x-3 pl-6 border-l border-outline-variant/30">
+<div class="text-right hidden lg:block">
+<p class="text-xs font-bold text-on-surface">Alex Rivera</p>
+<p class="text-[10px] text-primary uppercase tracking-tighter">Chief Agronomist</p>
+</div>
+<img class="w-10 h-10 rounded-full object-cover border border-primary/20" data-alt="portrait of a professional agronomist in a modern greenhouse setting with bright natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmMKsFOCbrr_A9jS58XJ9M5JCrKdOZ-4yHG2zd19MJbv1bPeqq8bd20BKjbN69O7DmRCyMqZSAmgLCv0JslsPr1SIT97cmBAu3Y1tAY4FOe7YrqPhhJeTQsseHsd6PaSEo60pRdPDG7oEiXhqDzFhQpsBPC8TMhLPe8nTK5I_AuCAY83PDi5V3WH9QNbFLnqx0PdFeXYrNvOyji5mXkTPF4bq2HnAgWgotmVubwgUbYHGwi-3XvdDvwi1OwepHIlaw_A1pV3Iz4yqk"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-screen">
+<div class="max-w-7xl mx-auto space-y-10">
+<!-- Page Header -->
+<section>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline text-5xl font-extrabold tracking-tight text-on-surface mb-2">Yield Predictor</h1>
+<p class="text-on-surface-variant max-w-2xl text-lg">Harness the Emerald Horizon neural network to simulate crop outcomes based on hyper-local environmental variables.</p>
+</div>
+<div class="flex space-x-3">
+<button class="bg-surface-container-highest px-6 py-3 rounded-xl font-bold flex items-center space-x-2 text-on-surface hover:bg-surface-bright transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="history">history</span>
+<span>Simulation History</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Main Layout: Asymmetric Bento Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Section: Inputs (4 Cols) -->
+<div class="col-span-12 lg:col-span-5 space-y-6">
+<!-- Accordion Groups -->
+<div class="space-y-4">
+<!-- Climate Factors -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="thermostat">thermostat</span>
+</div>
+<span class="font-headline text-lg font-bold text-on-surface">Climate Factors</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors" data-icon="expand_less">expand_less</span>
+</button>
+<div class="px-6 pb-8 space-y-8">
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-semibold text-slate-400">Mean Temperature (°C)</label>
+<span id="val-temp" class="text-primary font-mono font-bold">24.5°</span>
+</div>
+<input id="inp-temp" oninput="document.getElementById('val-temp').innerText=this.value+'°'" class="w-full" max="45" min="10" type="range" value="24"/>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-semibold text-slate-400">Relative Humidity (%)</label>
+<span id="val-hum" class="text-primary font-mono font-bold">68%</span>
+</div>
+<input id="inp-hum" oninput="document.getElementById('val-hum').innerText=this.value+'%'" class="w-full" max="100" min="0" type="range" value="68"/>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-semibold text-slate-400">Rainfall (mm)</label>
+<span id="val-rain" class="text-primary font-mono font-bold">120mm</span>
+</div>
+<input id="inp-rain" oninput="document.getElementById('val-rain').innerText=this.value+'mm'" class="w-full" max="300" min="20" type="range" value="120"/>
+</div>
+</div>
+</div>
+<!-- Soil Nutrients -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+</div>
+<span class="font-headline text-lg font-bold text-on-surface">Soil Nutrients (ppm)</span>
+</div>
+<span class="material-symbols-outlined text-slate-500" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-6 pb-8 grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Nitrogen</label>
+<input id="inp-n" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="45"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Phosphorus</label>
+<input id="inp-p" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="32"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Potassium</label>
+<input id="inp-k" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="18"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">pH Value</label>
+<input id="inp-ph" step="0.1" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="6.5"/>
+</div>
+</div>
+</div>
+<!-- Crop Inputs -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left group">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="compost">compost</span>
+</div>
+<span class="font-headline text-lg font-bold text-on-surface">Crop Management</span>
+</div>
+<span class="material-symbols-outlined text-slate-500" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-6 pb-8 space-y-6">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-400">Fertilizer Variant</label>
+<select id="inp-fert" class="w-full bg-surface-container-highest border-none rounded-lg text-on-surface font-medium focus:ring-1 focus:ring-primary/40 py-3">
+<option value="50">Emerald Bio-Enhancer X1 (50 kg)</option>
+<option value="100">Nitrogen-Plus Formula (100 kg)</option>
+<option value="150">Standard Organic Mix (150 kg)</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<button id="btn-predict" class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-black text-lg tracking-tight shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center space-x-3">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span>Generate AI Prediction</span>
+</button>
+</div>
+<!-- Right Section: Results (7 Cols) -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<!-- Prediction Result Card -->
+<div class="glass-panel relative rounded-3xl p-10 overflow-hidden group">
+<div class="absolute top-0 right-0 p-8">
+<div class="bg-primary/20 text-primary px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>High Confidence</span>
+</div>
+</div>
+<!-- Glow Background Decor -->
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
+<div class="relative z-10">
+<h3 class="text-on-surface-variant font-bold text-sm tracking-widest uppercase mb-6">Predicted Harvest Volume</h3>
+<div class="flex items-baseline space-x-4 mb-8">
+<span id="pred-result" class="font-headline text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-on-surface to-primary">--.-</span>
+<span class="text-3xl font-bold text-on-surface-variant">Q/ac</span>
+</div>
+<div class="grid grid-cols-2 gap-6 pt-8 border-t border-outline-variant/20">
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Standard Margin</p>
+<p class="text-xl font-bold text-on-surface">+3.2% vs. Season Avg</p>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Optimal Window</p>
+<p class="text-xl font-bold text-on-surface">Oct 12 - Oct 20</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Explainability Chart Section -->
+<div class="bg-surface-container-low rounded-3xl p-8 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline text-xl font-bold text-on-surface">Prediction Attribution (SHAP)</h3>
+<div class="flex items-center space-x-2 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-lg" data-icon="info">info</span>
+<span>Feature Impact</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- High Nitrogen (+) -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold px-1">
+<span class="text-on-surface-variant">Soil Nitrogen Level</span>
+<span id="shap-nitrogen-val" class="text-primary">+2.1 Q/ac</span>
+</div>
+<div class="h-10 w-full bg-surface-container-highest rounded-lg flex items-center">
+<div id="shap-nitrogen-bar" class="ml-[50%] h-full w-[25%] bg-gradient-to-r from-primary/40 to-primary rounded-r-lg flex items-center justify-end pr-3">
+<span class="material-symbols-outlined text-white text-sm" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+</div>
+<!-- Fertilizer Efficiency (+) -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold px-1">
+<span class="text-on-surface-variant">Fertilizer Efficiency</span>
+<span id="shap-fert-val" class="text-primary">+1.4 Q/ac</span>
+</div>
+<div class="h-10 w-full bg-surface-container-highest rounded-lg flex items-center">
+<div id="shap-fert-bar" class="ml-[50%] h-full w-[15%] bg-gradient-to-r from-primary/40 to-primary rounded-r-lg flex items-center justify-end pr-3">
+<span class="material-symbols-outlined text-white text-sm" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+</div>
+<!-- Rainfall Deficit (-) -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold px-1">
+<span class="text-on-surface-variant">Historical Rainfall Deficit</span>
+<span id="shap-rain-val" class="text-tertiary">-0.5 Q/ac</span>
+</div>
+<div class="h-10 w-full bg-surface-container-highest rounded-lg flex items-center justify-end">
+<div id="shap-rain-bar" class="mr-[50%] h-full w-[8%] bg-gradient-to-l from-tertiary/40 to-tertiary rounded-l-lg flex items-center justify-start pl-3">
+<span class="material-symbols-outlined text-white text-sm" data-icon="trending_down">trending_down</span>
+</div>
+</div>
+</div>
+<!-- Temperature (-) -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold px-1">
+<span class="text-on-surface-variant">Thermal Stress Index (Temp)</span>
+<span id="shap-temp-val" class="text-tertiary">-0.3 Q/ac</span>
+</div>
+<div class="h-10 w-full bg-surface-container-highest rounded-lg flex items-center justify-end">
+<div id="shap-temp-bar" class="mr-[50%] h-full w-[5%] bg-gradient-to-l from-tertiary/40 to-tertiary rounded-l-lg flex items-center justify-start pl-3">
+<span class="material-symbols-outlined text-white text-sm" data-icon="trending_down">trending_down</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 flex justify-center">
+<button class="text-primary text-xs font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Explore Full Attribution Model</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Contextual Insights Section -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/10 group hover:border-primary/30 transition-all">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+</div>
+<h4 class="font-headline font-bold text-lg mb-2">Optimization Tip</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Increasing soil Nitrogen to 52ppm could boost yield by an additional 1.8 Q/ac given the current humidity forecast.</p>
+</div>
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/10 group hover:border-secondary/30 transition-all">
+<div class="w-12 h-12 bg-secondary-container/20 rounded-xl flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<h4 class="font-headline font-bold text-lg mb-2">Risk Factor</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Predicted rainfall variance is high. Consider adaptive irrigation scheduling to mitigate the 0.5 Q/ac risk.</p>
+</div>
+<div class="bg-surface-container rounded-2xl p-6 border border-outline-variant/10 group hover:border-tertiary/30 transition-all">
+<div class="w-12 h-12 bg-tertiary-container/20 rounded-xl flex items-center justify-center text-tertiary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="auto_graph">auto_graph</span>
+</div>
+<h4 class="font-headline font-bold text-lg mb-2">Market Outlook</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Predicted yield falls within the 'Elite' category for the current market cycle. Potential for premium wholesale pricing.</p>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual FAB (Suppressed based on rules, but included if primary action is needed elsewhere) -->
+<!-- Not rendering FAB on this sub-page per suppression rules -->
+<script>
+document.getElementById('btn-predict').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-predict');
+    btn.innerHTML = `<span class="material-symbols-outlined animate-spin" data-icon="sync">sync</span><span>Calculating...</span>`;
+    
+    const payload = {
+        temperature: parseFloat(document.getElementById('inp-temp').value),
+        humidity: parseFloat(document.getElementById('inp-hum').value),
+        rainfall: parseFloat(document.getElementById('inp-rain').value),
+        nitrogen: parseFloat(document.getElementById('inp-n').value),
+        phosphorus: parseFloat(document.getElementById('inp-p').value),
+        potassium: parseFloat(document.getElementById('inp-k').value),
+        ph_value: parseFloat(document.getElementById('inp-ph').value),
+        fertilizer: parseFloat(document.getElementById('inp-fert').value)
+    };
+    
+    try {
+        const response = await fetch('/api/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        
+        if (result.prediction !== undefined && result.prediction !== null) {
+            // Update Prediction Value
+            document.getElementById('pred-result').innerText = result.prediction.toFixed(1);
+            
+            // Update SHAP Bars
+            if (result.shap_values) {
+                const sv = result.shap_values;
+                updateShapBar('shap-nitrogen', sv['Nitrogen (N)']);
+                updateShapBar('shap-temp', sv['Temperatue']);
+                updateShapBar('shap-rain', sv['Rain Fall (mm)']);
+                updateShapBar('shap-fert', sv['Fertilizer']);
+            }
+        } else {
+            alert('Error generating prediction: ' + (result.error || 'Unknown error'));
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Failed to connect to API.');
+    }
+    
+    btn.innerHTML = `<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span><span>Generate AI Prediction</span>`;
+});
+
+function updateShapBar(id, value) {
+    const bar = document.getElementById(id + '-bar');
+    const label = document.getElementById(id + '-val');
+    if (!bar || !label) return;
+    
+    const absVal = Math.abs(value);
+    const percentage = Math.min(absVal * 10, 50); // Scale for visibility
+    const sign = value >= 0 ? '+' : '-';
+    
+    label.innerText = `${sign}${absVal.toFixed(2)} Q/ac`;
+    label.className = value >= 0 ? 'text-primary' : 'text-tertiary';
+    
+    if (value >= 0) {
+        bar.parentElement.className = 'h-10 w-full bg-surface-container-highest rounded-lg flex items-center';
+        bar.className = `ml-[50%] h-full bg-gradient-to-r from-primary/40 to-primary rounded-r-lg flex items-center justify-end pr-3 transition-all duration-500`;
+        bar.style.width = percentage + '%';
+        bar.innerHTML = `<span class="material-symbols-outlined text-white text-sm" data-icon="trending_up">trending_up</span>`;
+    } else {
+        bar.parentElement.className = 'h-10 w-full bg-surface-container-highest rounded-lg flex items-center justify-end';
+        bar.className = `mr-[50%] h-full bg-gradient-to-l from-tertiary/40 to-tertiary rounded-l-lg flex items-center justify-start pl-3 transition-all duration-500`;
+        bar.style.width = percentage + '%';
+        bar.innerHTML = `<span class="material-symbols-outlined text-white text-sm" data-icon="trending_down">trending_down</span>`;
+    }
+}
+</script>
+</body></html>
