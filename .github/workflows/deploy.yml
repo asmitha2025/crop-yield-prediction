@@ -23,4 +23,4 @@ jobs:
           git config --global user.name "GitHub Actions"
           
           # Force push to Hugging Face Space git remote
-          git push --force https://asmitha2025:$HF_TOKEN@huggingface.co/spaces/asmitha2025/crop-yield-prediction main
+          git push --force https://Asmitha-28:$HF_TOKEN@huggingface.co/spaces/Asmitha-28/crop-yield-prediction main
