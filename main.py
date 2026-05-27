@@ -234,22 +234,26 @@ def make_metadata(best_name: str, best_model: Any, cv_df: pd.DataFrame, metrics_
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    try:
+        return templates.TemplateResponse(request=request, name="dashboard.html", context={"request": request})
+    except Exception as e:
+        import traceback
+        return Response(content=traceback.format_exc(), status_code=500, media_type="text/plain")
 
 
 @app.get("/predictor", response_class=HTMLResponse)
 async def predictor(request: Request):
-    return templates.TemplateResponse("predictor.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="predictor.html", context={"request": request})
 
 
 @app.get("/insights", response_class=HTMLResponse)
 async def insights(request: Request):
-    return templates.TemplateResponse("insights.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="insights.html", context={"request": request})
 
 
 @app.get("/explorer", response_class=HTMLResponse)
 async def explorer(request: Request):
-    return templates.TemplateResponse("explorer.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="explorer.html", context={"request": request})
 
 
 @app.get("/api/health")
