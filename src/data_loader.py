@@ -41,7 +41,7 @@ FEATURE_UNITS = {
     "Nitrogen (N)":   "kg/ha",
     "Phosphorus (P)": "kg/ha",
     "Potassium (K)":  "kg/ha",
-    TEMP_COL:         "°C",
+    TEMP_COL:         "deg C",
     "Humidity (%)":   "%",
     "pH Value":       "pH",
     "Rain Fall (mm)": "mm",

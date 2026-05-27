@@ -1,82 +1,104 @@
-# 🌾 Crop Yield Prediction API & Web Dashboard
+# Emerald Horizon: Controlled-Environment Crop Yield Intelligence
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+Emerald Horizon is a state-of-the-art controlled-environment agriculture analytics platform. Designed as a recruiters' showcase, it blends high-fidelity machine learning pipeline engineering with an ultra-premium, dark-themed dashboard. 
 
-An end-to-end Machine Learning pipeline that predicts agricultural crop yield based on environmental and soil conditions. This project features multiple machine learning models (XGBoost, Gradient Boosting, Random Forest, Decision Tree), an interactive web dashboard for real-time predictions, and **SHAP** (SHapley Additive exPlanations) for model explainability.
+The application utilizes **FastAPI** to back JSON API endpoints and render server-side pages via **Jinja2 templates**, fully styled with a responsive design using **Tailwind CSS v4** and customized glassmorphic card surfaces.
 
-## 🚀 Features
+---
 
-- **Advanced ML Models**: Compares XGBoost, Gradient Boosting Regressor, Random Forest, and Decision Trees using 5-fold cross-validation.
-- **Interactive Dashboard**: A full-fledged Streamlit web app with 4 pages (Data Explorer, Model Training, Predictor, and Insights).
-- **Explainable AI (XAI)**: Uses SHAP values to explain individual predictions in a waterfall chart, answering *why* a model made a specific prediction.
-- **Robust Pipeline**: Includes missing value imputation, proper metric tracking (R², RMSE, MAE, MAPE), and modular clean code architecture.
+## 🚀 The Stack & Core Technology
 
-## 📊 Dataset
+- **Backend Framework:** [FastAPI](https://fastapi.tiangolo.com/) – high-performance, asynchronous routing with robust Pydantic data validation schemas.
+- **Frontend & Rendering:** [Jinja2 Templates](https://jinja.palletsprojects.com/) & [Tailwind CSS v4](https://tailwindcss.com/) – creating a high-contrast editorial look concepted as "The Synthetic Greenhouse" (glassmorphism, vibrant soil/nature color palettes, zero rigid layout dividing lines).
+- **Explainable AI:** [SHAP (SHapley Additive exPlanations)](https://github.com/shap/shap) – TreeExplainer integration to extract hyper-local feature attribution details for each generated yield forecast.
+- **Machine Learning Pipeline:** [Scikit-learn](https://scikit-learn.org/) & [XGBoost](https://xgboost.readthedocs.io/) – comparisons across Decision Trees, Random Forests, Gradient Boosting, and Extreme Gradient Boosting Regressors with automated 5-Fold Cross-Validation selection.
 
-The dataset includes the following features:
-- **Soil Nutrients**: Nitrogen (N), Phosphorus (P), Potassium (K) (in kg/ha)
-- **Environment**: Temperature (°C), Humidity (%), Rain Fall (mm)
-- **Soil Status**: pH Value, Fertilizer (kg/ha)
-- **Target Variable**: Crop Yield (Quintals/acre)
+---
 
-*(Includes a realistic synthetic data generator script `generate_dataset.py` for testing).*
+## 📱 Interactive Agronomy Pages
 
-## 🛠️ Tech Stack
+Emerald Horizon delivers a complete, professional agronomic platform across four dynamic pages:
 
-- **Data Processing**: `pandas`, `numpy`
-- **Machine Learning**: `scikit-learn`, `xgboost`
-- **Model Explainability**: `shap`
-- **Visualization**: `matplotlib`, `seaborn`, `plotly`
-- **Web Application**: `streamlit`
+1. **Dashboard:** Live model health cards, sample totals, geographic agricultural yield trends, and automated reservoir pH anomaly highlighting.
+2. **Yield Predictor:** Simulate harvests interactively. Submit climate variables (Temperature, Humidity, Rain Fall) and soil nutrient levels (N, P, K, pH) through form elements to receive real-time predictions with custom **SHAP** feature contribution attribution feedback.
+3. **Model Insights:** Recruiter-ready data science deep dive containing holdout test scores ($R^2$, RMSE, MAE, MAPE), interactive feature importance lists, variable correlation matrix, and an actual-vs-predicted harvest tracking timeline.
+4. **Data Explorer:** An elegant grid to navigate granular records. Filter by location or pH range, execute real-time searches across raw sensor logs, and export raw data to CSV or download full model reports.
 
-## 💻 Installation
+---
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/crop-yield-prediction.git
-cd crop-yield-prediction
-```
+## 🛠️ Data Features & Features Matrix
 
-2. Create a virtual environment and install dependencies:
+The predictive models are trained on rich environmental feature sets:
+- `Nitrogen (N)` (kg/ha)
+- `Phosphorus (P)` (kg/ha)
+- `Potassium (K)` (kg/ha)
+- `Temperatue` (degrees C - preserving source dataset typo)
+- `Humidity (%)`
+- `pH Value`
+- `Rain Fall (mm)`
+- `Fertilizer` (kg/ha)
+
+**Target Variable:**
+- `Yeild (Q/acre)` (Quintals per acre - preserving source dataset typo)
+
+---
+
+## ⚙️ Seamless Setup & Installation
+
+Follow these steps to generate the dataset, train the predictive models, compile the style sheets, and run the FastAPI server:
+
+### 1. Create and Activate a Python Environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-pip install -r requirements.txt
+# On Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# On Linux/macOS:
+source venv/bin/activate
 ```
 
-3. Generate the synthetic dataset (if `crop yield data sheet.xlsx` is not present):
+### 2. Install Dependencies
+Install the required machine learning, web server, and styling dev dependencies:
+```bash
+pip install -r requirements.txt
+npm install
+```
+
+### 3. Generate the Dataset
+Create the synthetic agricultural dataset. This script generates 1,000 realistic agricultural observations with non-linear environmental relationships and realistic anomalies, saving them to a spreadsheet:
 ```bash
 python generate_dataset.py
 ```
 
-## 🏃‍♂️ Usage
-
-### 1. Web Dashboard (Recommended)
-Launch the interactive Streamlit dashboard:
-```bash
-streamlit run app.py
-```
-This will open a local web server (typically `http://localhost:8501`).
-
-### 2. Command Line Interface (CLI)
-Run the automated pipeline to train models and output metrics to the console:
+### 4. Train the Model Pipeline
+Execute the machine learning pipeline. This loads the generated Excel data, splits it into training/holdout sets, evaluates four competitive tree-based regression models using 5-fold cross validation, and serializes the best performing model and its metadata:
 ```bash
 python crop_yield_prediction.py
 ```
+*Outputs generated:* `crop_yield_model.pkl` and `model_metadata.pkl`.
 
-## 📈 Model Performance Highlights
-*Sample metrics using 5-fold Cross-Validation*
+### 5. Compile Tailwind CSS Output
+Build the compiled CSS files using the Tailwind CLI:
+```bash
+npm run build:css
+```
 
-| Model | R² Score | RMSE |
-|-------|----------|------|
-| **XGBoost** | `~0.98` | `~1.2` |
-| **Gradient Boosting** | `~0.96` | `~2.4` |
-| **Random Forest** | `~0.95` | `~3.0` |
-| **Decision Tree** | `~0.92` | `~3.8` |
+### 6. Run the FastAPI Development Server
+Start the uvicorn development server:
+```bash
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+Open your browser and navigate to: **`http://127.0.0.1:8000`**
 
-*(Actual metrics vary based on random seed and dataset generation)*
+---
 
-## 📄 License
-This project is licensed under the MIT License.
+## 🔌 API Endpoints Reference
+
+The FastAPI backend exposes a clean JSON API for consumption by the Jinja templates and external clients:
+- `GET /api/health` – System status, model loading checks, and hyperparameter metadata.
+- `GET /api/dashboard` – Summarized averages, yield targets, anomaly lists, and active greenhouse sectors.
+- `GET /api/insights` – Model metrics, computed feature importances, feature correlation metrics, and comparison metrics.
+- `GET /api/records` – Searchable, filterable, and paginated dataset logs.
+- `GET /api/export.csv` – Generate and stream the filtered dataset as a CSV file.
+- `GET /api/report` – Download a plain-text evaluation report containing core metrics and top feature attributions.
+- `POST /api/predict` – Submits soil and climate parameters to calculate predicted yield along with **SHAP** attributions.
+- `POST /api/retrain` – Automatically triggers a pipeline execution on the current dataset to search for the best model and refresh the serialized files.

@@ -8,10 +8,14 @@ Uses the modularized src components to train and evaluate models.
 import logging
 import sys
 import os
+import math
 import pickle
-import pandas as pd
+from datetime import datetime
+from typing import Any
 
-from src.data_loader import load_data, get_features_target, get_summary_stats
+import numpy as np
+
+from src.data_loader import FEATURE_COLS, YIELD_COL, load_data, get_features_target, get_summary_stats
 from src.model_trainer import train_all_models, get_best_model_name
 from src.evaluator import compute_all_metrics
 
@@ -25,6 +29,20 @@ logger = logging.getLogger("CropYieldPipeline")
 
 DATA_FILE = "crop yield data sheet.xlsx"
 MODEL_FILE = "crop_yield_model.pkl"
+METADATA_FILE = "model_metadata.pkl"
+
+
+def to_builtin(value: Any) -> Any:
+    """Convert numpy scalar values so metadata can be returned as JSON."""
+    if isinstance(value, np.generic):
+        return to_builtin(value.item())
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, dict):
+        return {key: to_builtin(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [to_builtin(item) for item in value]
+    return value
 
 
 def main():
@@ -61,15 +79,34 @@ def main():
     metrics_df = compute_all_metrics(models, X_test, y_test)
     logger.info("\nTest Set Metrics:\n%s", metrics_df.to_string())
 
-    # 5. Save Best Model
-    logger.info("\n[STEP 5] Saving Best Model")
+    # 5. Save Best Model and Metadata
+    logger.info("\n[STEP 5] Saving Best Model and Metadata")
     best_name = get_best_model_name(cv_df)
     best_model = models[best_name]
     
     with open(MODEL_FILE, "wb") as f:
         pickle.dump(best_model, f)
-        
+
+    metadata = {
+        "model_name": best_name,
+        "model_type": type(best_model).__name__,
+        "model_params": to_builtin(best_model.get_params()),
+        "training_date": datetime.now().isoformat(timespec="seconds"),
+        "cv_metrics": to_builtin(cv_df.loc[best_name].to_dict()),
+        "test_metrics": to_builtin(metrics_df.loc[best_name].to_dict()),
+        "features": FEATURE_COLS,
+        "target": YIELD_COL,
+        "target_min": float(y.min()),
+        "target_max": float(y.max()),
+        "training_samples": int(len(X_train)),
+        "test_samples": int(len(X_test)),
+    }
+
+    with open(METADATA_FILE, "wb") as f:
+        pickle.dump(metadata, f)
+
     logger.info("WINNER: %s (Saved to %s)", best_name, MODEL_FILE)
+    logger.info("Metadata saved to %s", METADATA_FILE)
     
     logger.info("="*60)
     logger.info("PIPELINE COMPLETED SUCCESSFULLY")

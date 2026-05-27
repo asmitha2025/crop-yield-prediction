@@ -1,7 +1,7 @@
 {
   "name": "crop-yield-prediction",
   "version": "1.0.0",
-  "description": "[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org) [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)",
+  "description": "FastAPI crop yield prediction dashboard with Jinja2 templates, Tailwind CSS v4, SHAP explanations, and model analytics.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

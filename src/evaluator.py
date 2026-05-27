@@ -40,7 +40,7 @@ def compute_metrics(
         "%s | R2=%.4f  MAE=%.4f  RMSE=%.4f  MAPE=%.2f%%",
         model_name, r2, mae, rmse, mape,
     )
-    return {"R²": r2, "MAE": mae, "RMSE": rmse, "MSE": mse, "MAPE (%)": mape}
+    return {"R2": r2, "MAE": mae, "RMSE": rmse, "MSE": mse, "MAPE (%)": mape}
 
 
 def compute_all_metrics(

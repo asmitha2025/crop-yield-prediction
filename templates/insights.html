@@ -3,6 +3,7 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Insights | Emerald Horizon</title>
 <link href="/static/css/output.css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +21,7 @@
         .glass-card { background: rgba(23, 31, 51, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(134, 148, 138, 0.1); }
     </style>
 </head>
-<body class="bg-surface text-on-surface">
+<body id="insights-page" class="bg-surface text-on-surface">
 <!-- SideNavBar Shell -->
 <aside class="bg-slate-950 flex flex-col h-screen p-6 space-y-8 h-full w-64 fixed left-0 top-0 overflow-y-auto bg-gradient-to-r from-slate-900 to-[#0b1326] shadow-2xl shadow-black/50 z-50">
 <div class="flex items-center space-x-3">
@@ -100,11 +101,11 @@
 <p class="text-on-surface-variant text-lg max-w-2xl">Deep dive into the neural architecture driving Emerald Horizon's yield predictions and seasonal accuracy.</p>
 </div>
 <div class="flex space-x-3">
-<button class="px-4 py-2 bg-surface-container-highest text-on-surface rounded-xl font-semibold text-sm hover:bg-surface-bright transition-colors flex items-center space-x-2">
+<button id="export-report" class="px-4 py-2 bg-surface-container-highest text-on-surface rounded-xl font-semibold text-sm hover:bg-surface-bright transition-colors flex items-center space-x-2">
 <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
 <span>Export Report</span>
 </button>
-<button class="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary-container rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform flex items-center space-x-2">
+<button id="retrain-model" class="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary-container rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform flex items-center space-x-2">
 <span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
 <span>Retrain Model</span>
 </button>
@@ -115,8 +116,8 @@
 <!-- R2 Score Card -->
 <div class="glass-card p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container-high/40 transition-all">
 <div>
-<p class="text-xs font-headline font-bold text-slate-500 uppercase tracking-widest mb-1">R² Score</p>
-<p class="text-4xl font-headline font-black text-primary">0.89</p>
+<p class="text-xs font-headline font-bold text-slate-500 uppercase tracking-widest mb-1">R2 Score</p>
+<p data-insight="r2" class="text-4xl font-headline font-black text-primary">--</p>
 <p class="text-xs text-emerald-400 mt-2 flex items-center">
 <span class="material-symbols-outlined text-xs mr-1" data-icon="trending_up">trending_up</span>
                             +2.4% vs last cycle
@@ -130,7 +131,7 @@
 <div class="glass-card p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container-high/40 transition-all">
 <div>
 <p class="text-xs font-headline font-bold text-slate-500 uppercase tracking-widest mb-1">RMSE</p>
-<p class="text-4xl font-headline font-black text-on-surface">1.2</p>
+<p data-insight="rmse" class="text-4xl font-headline font-black text-on-surface">--</p>
 <p class="text-xs text-slate-400 mt-2">Root Mean Square Error</p>
 </div>
 <div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:rotate-12 transition-transform">
@@ -141,7 +142,7 @@
 <div class="glass-card p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container-high/40 transition-all">
 <div>
 <p class="text-xs font-headline font-bold text-slate-500 uppercase tracking-widest mb-1">MAE</p>
-<p class="text-4xl font-headline font-black text-tertiary">0.8</p>
+<p data-insight="mae" class="text-4xl font-headline font-black text-tertiary">--</p>
 <p class="text-xs text-slate-400 mt-2">Mean Absolute Error</p>
 </div>
 <div class="w-16 h-16 rounded-full bg-tertiary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -156,12 +157,15 @@
 <div class="flex justify-between items-center mb-8">
 <div>
 <h3 class="text-xl font-headline font-bold text-on-surface">Feature Importance</h3>
-<p class="text-xs text-on-surface-variant mt-1">Impact factor of environmental variables on yield</p>
+<p data-insight="model-name" class="text-xs text-on-surface-variant mt-1">Loading model details...</p>
 </div>
 <span class="material-symbols-outlined text-slate-500" data-icon="info">info</span>
 </div>
-<div class="flex-1 flex items-center justify-center">
-<img src="/static/images/feature_importance.png" alt="Feature Importance" class="w-full h-auto rounded-lg shadow-lg">
+<div class="mb-6 overflow-hidden rounded-xl border border-outline-variant/10 bg-slate-950/40 p-2">
+<img src="/static/images/feature_importance.png" alt="Feature Importance Plot" class="w-full h-auto object-contain rounded-lg hover:scale-[1.01] transition-transform duration-300">
+</div>
+<div id="feature-importance-list" class="flex-1 space-y-4">
+<p class="text-sm text-slate-500">Loading feature importance...</p>
 </div>
 </div>
 <!-- Correlation Heatmap -->
@@ -177,8 +181,11 @@
 <div class="w-3 h-3 rounded-sm bg-primary"></div>
 </div>
 </div>
-<div class="flex-1 flex items-center justify-center">
-<img src="/static/images/correlation_heatmap.png" alt="Correlation Heatmap" class="w-full h-auto rounded-lg shadow-lg">
+<div class="mb-6 overflow-hidden rounded-xl border border-outline-variant/10 bg-slate-950/40 p-2">
+<img src="/static/images/correlation_heatmap.png" alt="Variable Correlation Heatmap" class="w-full h-auto object-contain rounded-lg hover:scale-[1.01] transition-transform duration-300">
+</div>
+<div id="correlation-list" class="flex-1 space-y-4">
+<p class="text-sm text-slate-500">Loading correlations...</p>
 </div>
 </div>
 </div>
@@ -196,8 +203,15 @@
 </div>
 <h3 class="text-xl font-headline font-bold text-on-surface mb-2">Yield Accuracy Tracking</h3>
 <p class="text-sm text-on-surface-variant mb-12">Model performance vs real-world outcomes over the last 6 months</p>
-<div class="h-64 flex items-center justify-center">
-<img src="/static/images/residual_plots.png" alt="Actual vs Predicted" class="h-full w-auto rounded-lg shadow-lg">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-7 overflow-hidden rounded-xl border border-outline-variant/10 bg-slate-950/40 p-2">
+<img src="/static/images/predictions_scatter.png" alt="Predictions Scatter Plot" class="w-full h-auto object-contain rounded-lg hover:scale-[1.01] transition-transform duration-300">
+</div>
+<div class="lg:col-span-5">
+<div id="accuracy-track" class="h-64 overflow-y-auto space-y-3 pr-2">
+<p class="text-sm text-slate-500">Loading actual vs predicted records...</p>
+</div>
+</div>
 </div>
 </div>
 <!-- Footer AI Insights Section -->
@@ -207,15 +221,15 @@
 </div>
 <div>
 <h4 class="text-lg font-headline font-bold text-on-surface mb-2">Automated Optimization Strategy</h4>
-<p class="text-on-surface-variant leading-relaxed mb-4">
-                        The model has detected a high correlation between <span class="text-primary font-semibold">Night Humidity</span> and <span class="text-primary font-semibold">Yield Decline</span> in Sector G. To maintain the 0.89 R² accuracy, the system suggests adjusting the irrigation cycles between 02:00 and 05:00 UTC.
+<p data-insight="strategy" class="text-on-surface-variant leading-relaxed mb-4">
+                        The model has detected a high correlation between <span class="text-primary font-semibold">Night Humidity</span> and <span class="text-primary font-semibold">Yield Decline</span> in Sector G. To maintain the 0.89 R2 accuracy, the system suggests adjusting the irrigation cycles between 02:00 and 05:00 UTC.
                     </p>
 <div class="flex space-x-4">
-<button class="text-primary text-sm font-bold flex items-center hover:underline">
+<button id="view-sector-analysis" class="text-primary text-sm font-bold flex items-center hover:underline">
                             View Sector G Analysis
                             <span class="material-symbols-outlined text-xs ml-1" data-icon="chevron_right">chevron_right</span>
 </button>
-<button class="text-slate-400 text-sm font-bold flex items-center hover:underline">
+<button id="read-retraining-logs" class="text-slate-400 text-sm font-bold flex items-center hover:underline">
                             Read Retraining Logs
                             <span class="material-symbols-outlined text-xs ml-1" data-icon="chevron_right">chevron_right</span>
 </button>
@@ -229,4 +243,5 @@
 <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
 <div class="absolute bottom-[-10%] left-[10%] w-[400px] h-[400px] bg-secondary-container/5 rounded-full blur-[100px]"></div>
 </div>
+<script src="/static/js/app.js"></script>
 </body></html>

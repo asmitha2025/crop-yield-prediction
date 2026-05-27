@@ -25,7 +25,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-surface text-on-surface selection:bg-primary/30 min-h-screen">
+<body id="explorer-page" class="bg-surface text-on-surface selection:bg-primary/30 min-h-screen">
 <!-- SideNavBar Shell -->
 <aside class="bg-slate-950 text-[#10B981] font-plus-jakarta text-sm tracking-tight h-full w-64 fixed left-0 top-0 overflow-y-auto bg-gradient-to-r from-slate-900 to-[#0b1326] shadow-2xl shadow-black/50 z-50 flex flex-col p-6 space-y-8">
 <div class="flex items-center space-x-3">
@@ -72,7 +72,7 @@
 <div class="flex items-center gap-6 flex-1">
 <div class="relative max-w-md w-full group">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">search</span>
-<input class="w-full bg-surface-container-highest border-none rounded-full py-2.5 pl-12 pr-6 text-sm text-on-surface placeholder:text-slate-500 focus:ring-1 focus:ring-primary/40 transition-all backdrop-blur-md" placeholder="Search raw sensor logs..." type="text"/>
+<input id="records-search" class="w-full bg-surface-container-highest border-none rounded-full py-2.5 pl-12 pr-6 text-sm text-on-surface placeholder:text-slate-500 focus:ring-1 focus:ring-primary/40 transition-all backdrop-blur-md" placeholder="Search raw sensor logs..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -99,11 +99,11 @@
                 </p>
 </div>
 <div class="flex gap-3">
-<button class="flex items-center gap-2 bg-surface-container-highest text-on-surface px-5 py-2.5 rounded-xl font-semibold hover:bg-surface-bright transition-all active:scale-95">
+<button id="export-csv" class="flex items-center gap-2 bg-surface-container-highest text-on-surface px-5 py-2.5 rounded-xl font-semibold hover:bg-surface-bright transition-all active:scale-95">
 <span class="material-symbols-outlined text-lg">file_download</span>
                     Export CSV
                 </button>
-<button class="flex items-center gap-2 bg-gradient-to-br from-[#4edea3] to-[#10b981] text-slate-950 px-5 py-2.5 rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all active:scale-95">
+<button id="create-report" class="flex items-center gap-2 bg-gradient-to-br from-[#4edea3] to-[#10b981] text-slate-950 px-5 py-2.5 rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all active:scale-95">
 <span class="material-symbols-outlined text-lg">add_chart</span>
                     Create Report
                 </button>
@@ -121,16 +121,16 @@
 <div class="space-y-6">
 <div>
 <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Temporal Range</label>
-<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm text-on-surface focus:ring-1 focus:ring-primary/40 py-2.5">
-<option>Last 30 Days</option>
-<option>Quarterly Analysis</option>
-<option>Year-to-Date</option>
-<option>Custom Range</option>
+<select id="temporal-range" class="w-full bg-surface-container-lowest border-none rounded-lg text-sm text-on-surface focus:ring-1 focus:ring-primary/40 py-2.5">
+<option value="Last 30 Days">Last 30 Days</option>
+<option value="Quarterly Analysis">Quarterly Analysis</option>
+<option value="Year-to-Date">Year-to-Date</option>
+<option value="Custom Range">Custom Range</option>
 </select>
 </div>
 <div>
 <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Field Location</label>
-<div class="space-y-2">
+<div id="location-filter-options" class="space-y-2">
 <label class="flex items-center gap-3 group cursor-pointer">
 <input checked="" class="w-4 h-4 rounded bg-surface-container-lowest border-none text-primary focus:ring-primary/20" type="checkbox"/>
 <span class="text-sm text-slate-300 group-hover:text-on-surface transition-colors">North Valley Sector</span>
@@ -147,13 +147,13 @@
 </div>
 <div>
 <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">pH Range Threshold</label>
-<input class="w-full accent-primary bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer" type="range"/>
+<input id="ph-range" class="w-full accent-primary bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer" min="3.5" max="9.5" step="0.1" value="9.5" type="range"/>
 <div class="flex justify-between mt-2 text-[10px] text-slate-500 font-bold">
 <span>pH 4.0</span>
-<span>pH 9.0</span>
+<span id="ph-range-label">pH 9.5</span>
 </div>
 </div>
-<button class="w-full py-2.5 text-xs font-bold uppercase tracking-widest text-on-surface border border-outline-variant/30 rounded-lg hover:border-primary/40 hover:text-primary transition-all">
+<button id="reset-filters" class="w-full py-2.5 text-xs font-bold uppercase tracking-widest text-on-surface border border-outline-variant/30 rounded-lg hover:border-primary/40 hover:text-primary transition-all">
                             Reset Parameters
                         </button>
 </div>
@@ -176,14 +176,17 @@
 </div>
 <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">NORMALIZED</span>
 </div>
+<div class="mb-4 overflow-hidden rounded-xl border border-outline-variant/10 bg-slate-950/40 p-2">
+<img src="/static/images/yield_distribution.png" alt="Yield Distribution Chart" class="w-full h-auto object-contain rounded-lg hover:scale-[1.01] transition-transform duration-300">
+</div>
 <!-- Mock Histogram Visualization -->
-<div class="flex-1 flex items-center justify-center h-40">
-<img src="/static/images/yield_distribution.png" alt="Yield Distribution" class="h-full w-auto rounded-lg shadow-lg">
+<div id="yield-distribution-chart" class="flex-1 flex items-end gap-1 h-40">
+<div class="text-sm text-slate-500">Loading distribution...</div>
 </div>
 </div>
 <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-tighter mt-4">
 <span>Low Yield</span>
-<span>Median (4.2 t/h)</span>
+<span id="yield-middle-label">Median</span>
 <span>High Yield</span>
 </div>
 </div>
@@ -199,8 +202,11 @@
 <span class="material-symbols-outlined text-sm">more_vert</span>
 </button>
 </div>
-<div class="flex-1 flex items-center justify-center">
-<img src="/static/images/scatter_plots.png" alt="Feature Variance" class="w-full h-auto rounded-lg shadow-lg">
+<div class="mb-4 overflow-hidden rounded-xl border border-outline-variant/10 bg-slate-950/40 p-2">
+<img src="/static/images/feature_distributions.png" alt="Feature Distributions Plot" class="w-full h-auto object-contain rounded-lg hover:scale-[1.01] transition-transform duration-300">
+</div>
+<div id="feature-variance-chart" class="flex-1 space-y-4">
+<div class="text-sm text-slate-500">Loading variance...</div>
 </div>
 </div>
 </div>
@@ -211,13 +217,13 @@
 <div class="flex items-center justify-between px-2">
 <div class="flex items-center gap-4">
 <h2 class="text-xl font-bold text-on-surface">Raw Agricultural Records</h2>
-<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold text-slate-400 border border-outline-variant/10">14,209 TOTAL ENTRIES</span>
+<span id="records-total" class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold text-slate-400 border border-outline-variant/10">-- TOTAL ENTRIES</span>
 </div>
 <div class="flex gap-2">
-<button class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
+<button id="filter-toggle" class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-xl">filter_alt</span>
 </button>
-<button class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
+<button id="column-toggle" class="p-2 rounded-lg bg-surface-container-high text-slate-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-xl">view_column</span>
 </button>
 </div>
@@ -227,23 +233,23 @@
 <thead class="bg-surface-container-highest/50 border-b border-outline-variant/20">
 <tr>
 <th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">
-<div class="flex items-center gap-1 cursor-pointer group">
+<button data-sort="date" class="flex items-center gap-1 cursor-pointer group">
                                     Date <span class="material-symbols-outlined text-xs group-hover:translate-y-0.5 transition-transform">expand_more</span>
-</div>
+</button>
 </th>
-<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Location</th>
-<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Soil pH</th>
-<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Moisture</th>
-<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">Temp (C)</th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]"><button data-sort="location">Location</button></th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]"><button data-sort="ph">Soil pH</button></th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]"><button data-sort="moisture">Moisture</button></th>
+<th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]"><button data-sort="temp">Temp (C)</button></th>
 <th class="px-6 py-4 text-[10px] font-bold text-primary uppercase tracking-[0.15em]">
-<div class="flex items-center gap-1 cursor-pointer group justify-end">
+<button data-sort="yield" class="flex items-center gap-1 cursor-pointer group justify-end w-full">
                                     Yield <span class="material-symbols-outlined text-xs group-hover:translate-y-0.5 transition-transform">expand_more</span>
-</div>
+</button>
 </th>
 <th class="px-6 py-4 text-right"></th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant/10 text-sm font-medium">
+<tbody id="records-body" class="divide-y divide-outline-variant/10 text-sm font-medium">
 <!-- Row 1 -->
 <tr class="hover:bg-primary/5 transition-colors group">
 <td class="px-6 py-4 text-on-surface">Oct 24, 2023 <span class="text-slate-500 font-normal ml-2">14:02</span></td>
@@ -262,7 +268,7 @@
 <span class="text-xs text-slate-500">48%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-slate-300">24.1°</td>
+<td class="px-6 py-4 text-slate-300">24.1&deg;</td>
 <td class="px-6 py-4 text-right font-bold text-on-surface">4.82 t/h</td>
 <td class="px-6 py-4 text-right">
 <span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
@@ -286,7 +292,7 @@
 <span class="text-xs text-slate-500">72%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-slate-300">22.8°</td>
+<td class="px-6 py-4 text-slate-300">22.8&deg;</td>
 <td class="px-6 py-4 text-right font-bold text-on-surface">3.41 t/h</td>
 <td class="px-6 py-4 text-right">
 <span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
@@ -310,7 +316,7 @@
 <span class="text-xs text-slate-500">31%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-slate-300">19.5°</td>
+<td class="px-6 py-4 text-slate-300">19.5&deg;</td>
 <td class="px-6 py-4 text-right font-bold text-on-surface">5.19 t/h</td>
 <td class="px-6 py-4 text-right">
 <span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
@@ -334,7 +340,7 @@
 <span class="text-xs text-slate-500">55%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-slate-300">25.3°</td>
+<td class="px-6 py-4 text-slate-300">25.3&deg;</td>
 <td class="px-6 py-4 text-right font-bold text-on-surface">4.60 t/h</td>
 <td class="px-6 py-4 text-right">
 <span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
@@ -358,7 +364,7 @@
 <span class="text-xs text-slate-500">88%</span>
 </div>
 </td>
-<td class="px-6 py-4 text-slate-300">21.4°</td>
+<td class="px-6 py-4 text-slate-300">21.4&deg;</td>
 <td class="px-6 py-4 text-right font-bold text-on-surface">2.95 t/h</td>
 <td class="px-6 py-4 text-right">
 <span class="material-symbols-outlined text-slate-600 group-hover:text-primary cursor-pointer transition-colors">open_in_new</span>
@@ -368,17 +374,13 @@
 </table>
 <!-- Pagination Footer -->
 <div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant/10 flex items-center justify-between">
-<p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Showing 1 to 5 of 14,209</p>
+<p id="records-range" class="text-xs text-slate-500 font-bold uppercase tracking-wider">Loading records...</p>
 <div class="flex items-center gap-2">
-<button class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
+<button id="records-prev" class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
 <span class="material-symbols-outlined text-sm">chevron_left</span>
 </button>
-<button class="px-3 py-1 rounded-lg bg-primary text-slate-950 font-bold text-xs">1</button>
-<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">2</button>
-<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">3</button>
-<span class="text-slate-600 mx-1">...</span>
-<button class="px-3 py-1 rounded-lg hover:bg-slate-800 text-slate-400 font-bold text-xs transition-colors">2842</button>
-<button class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
+<button class="px-3 py-1 rounded-lg bg-primary text-slate-950 font-bold text-xs">Live</button>
+<button id="records-next" class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-on-surface transition-colors">
 <span class="material-symbols-outlined text-sm">chevron_right</span>
 </button>
 </div>
@@ -404,8 +406,8 @@
 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">speed</span>
 </div>
 <div>
-<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Sample Frequency</h4>
-<p class="text-2xl font-black text-on-surface">0.5 Hz</p>
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Filtered Avg pH</h4>
+<p id="avg-ph-filtered" class="text-2xl font-black text-on-surface">--</p>
 </div>
 </div>
 </div>
@@ -415,12 +417,13 @@
 <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">storage</span>
 </div>
 <div>
-<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Volume</h4>
-<p class="text-2xl font-black text-on-surface">84.2 GB</p>
+<h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Filtered Avg Yield</h4>
+<p id="avg-yield-filtered" class="text-2xl font-black text-on-surface">--</p>
 </div>
 </div>
 </div>
 </section>
 </main>
 <!-- Contextual FAB suppressed as per instruction for detail/data screens -->
+<script src="/static/js/app.js"></script>
 </body></html>

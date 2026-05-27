@@ -29,7 +29,7 @@ yield_values = (
     + 0.10 * df['Phosphorus (P)']
     + 0.08 * df['Potassium (K)']
     + 0.5 * df['Rain Fall (mm)'] / 10
-    - 0.3 * np.abs(df['Temperatue'] - 25)   # optimal temp ~25°C
+    - 0.3 * np.abs(df['Temperatue'] - 25)   # optimal temp ~25 deg C
     - 2.0 * np.abs(df['pH Value'] - 6.5)     # optimal pH ~6.5
     + 0.05 * df['Fertilizer']
     + 0.02 * df['Humidity (%)']
@@ -51,4 +51,4 @@ print(f"\nBad temperature rows (index): {bad_indices.tolist()}")
 
 # Save as Excel
 df.to_excel("crop yield data sheet.xlsx", index=False)
-print(f"\n✓ Dataset saved to 'crop yield data sheet.xlsx'")
+print("\nDataset saved to 'crop yield data sheet.xlsx'")

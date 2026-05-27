@@ -40,7 +40,7 @@
         }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<body id="predictor-page" class="bg-surface text-on-surface font-body selection:bg-primary/30">
 <!-- SideNavBar (Authority: JSON) -->
 <aside class="bg-slate-950 flex flex-col h-screen p-6 space-y-8 h-full w-64 fixed left-0 top-0 overflow-y-auto bg-gradient-to-r from-slate-900 to-[#0b1326] shadow-2xl shadow-black/50 z-50">
 <div class="flex items-center space-x-3">
@@ -114,7 +114,7 @@
 <p class="text-on-surface-variant max-w-2xl text-lg">Harness the Emerald Horizon neural network to simulate crop outcomes based on hyper-local environmental variables.</p>
 </div>
 <div class="flex space-x-3">
-<button class="bg-surface-container-highest px-6 py-3 rounded-xl font-bold flex items-center space-x-2 text-on-surface hover:bg-surface-bright transition-all">
+<button id="simulation-history" class="bg-surface-container-highest px-6 py-3 rounded-xl font-bold flex items-center space-x-2 text-on-surface hover:bg-surface-bright transition-all">
 <span class="material-symbols-outlined text-xl" data-icon="history">history</span>
 <span>Simulation History</span>
 </button>
@@ -141,17 +141,17 @@
 <div class="px-6 pb-8 space-y-8">
 <div class="space-y-4">
 <div class="flex justify-between items-center">
-<label class="text-sm font-semibold text-slate-400">Mean Temperature (°C)</label>
-<span id="val-temp" class="text-primary font-mono font-bold">24.5°</span>
+<label class="text-sm font-semibold text-slate-400">Mean Temperature (&deg;C)</label>
+<span id="val-temp" class="text-primary font-mono font-bold">24&deg;</span>
 </div>
-<input id="inp-temp" oninput="document.getElementById('val-temp').innerText=this.value+'°'" class="w-full" max="45" min="10" type="range" value="24"/>
+<input id="inp-temp" oninput="document.getElementById('val-temp').innerText=this.value+'\\u00B0'" class="w-full" max="45" min="8" type="range" value="24"/>
 </div>
 <div class="space-y-4">
 <div class="flex justify-between items-center">
 <label class="text-sm font-semibold text-slate-400">Relative Humidity (%)</label>
 <span id="val-hum" class="text-primary font-mono font-bold">68%</span>
 </div>
-<input id="inp-hum" oninput="document.getElementById('val-hum').innerText=this.value+'%'" class="w-full" max="100" min="0" type="range" value="68"/>
+<input id="inp-hum" oninput="document.getElementById('val-hum').innerText=this.value+'%'" class="w-full" max="100" min="14" type="range" value="68"/>
 </div>
 <div class="space-y-4">
 <div class="flex justify-between items-center">
@@ -176,19 +176,19 @@
 <div class="px-6 pb-8 grid grid-cols-2 gap-4">
 <div class="space-y-2">
 <label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Nitrogen</label>
-<input id="inp-n" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="45"/>
+<input id="inp-n" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" min="10" max="140" step="0.1" value="45"/>
 </div>
 <div class="space-y-2">
 <label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Phosphorus</label>
-<input id="inp-p" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="32"/>
+<input id="inp-p" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" min="5" max="145" step="0.1" value="32"/>
 </div>
 <div class="space-y-2">
 <label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Potassium</label>
-<input id="inp-k" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="18"/>
+<input id="inp-k" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" min="5" max="205" step="0.1" value="18"/>
 </div>
 <div class="space-y-2">
 <label class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">pH Value</label>
-<input id="inp-ph" step="0.1" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="6.5"/>
+<input id="inp-ph" step="0.1" min="3.5" max="9.5" class="w-full bg-surface-container-highest border-none rounded-lg text-primary font-mono font-bold focus:ring-1 focus:ring-primary/40" type="number" value="6.5"/>
 </div>
 </div>
 </div>
@@ -219,6 +219,7 @@
 <span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
 <span>Generate AI Prediction</span>
 </button>
+<p id="predict-message" class="hidden text-sm font-semibold text-tertiary"></p>
 </div>
 <!-- Right Section: Results (7 Cols) -->
 <div class="col-span-12 lg:col-span-7 space-y-8">
@@ -310,7 +311,7 @@
 </div>
 </div>
 <div class="pt-4 flex justify-center">
-<button class="text-primary text-xs font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Explore Full Attribution Model</button>
+<button id="full-attribution" class="text-primary text-xs font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Explore Full Attribution Model</button>
 </div>
 </div>
 </div>
@@ -344,8 +345,14 @@
 <!-- Contextual FAB (Suppressed based on rules, but included if primary action is needed elsewhere) -->
 <!-- Not rendering FAB on this sub-page per suppression rules -->
 <script>
+const predictButtonHtml = `<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span><span>Generate AI Prediction</span>`;
+
 document.getElementById('btn-predict').addEventListener('click', async () => {
     const btn = document.getElementById('btn-predict');
+    const message = document.getElementById('predict-message');
+    message.classList.add('hidden');
+    message.innerText = '';
+    btn.disabled = true;
     btn.innerHTML = `<span class="material-symbols-outlined animate-spin" data-icon="sync">sync</span><span>Calculating...</span>`;
     
     const payload = {
@@ -365,13 +372,17 @@ document.getElementById('btn-predict').addEventListener('click', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        const result = await response.json();
+        const result = await response.json().catch(() => ({ detail: 'API returned an invalid response.' }));
+        if (!response.ok) {
+            throw new Error(formatApiError(result));
+        }
         
         if (result.prediction !== undefined && result.prediction !== null) {
-            // Update Prediction Value
             document.getElementById('pred-result').innerText = result.prediction.toFixed(1);
+            const history = JSON.parse(localStorage.getItem('yieldPredictionHistory') || '[]');
+            history.push({ prediction: result.prediction, payload, time: new Date().toLocaleString() });
+            localStorage.setItem('yieldPredictionHistory', JSON.stringify(history.slice(-10)));
             
-            // Update SHAP Bars
             if (result.shap_values) {
                 const sv = result.shap_values;
                 updateShapBar('shap-nitrogen', sv['Nitrogen (N)']);
@@ -380,29 +391,49 @@ document.getElementById('btn-predict').addEventListener('click', async () => {
                 updateShapBar('shap-fert', sv['Fertilizer']);
             }
         } else {
-            alert('Error generating prediction: ' + (result.error || 'Unknown error'));
+            throw new Error(result.error || 'Prediction response did not include a value.');
         }
     } catch (e) {
         console.error(e);
-        alert('Failed to connect to API.');
+        showPredictMessage(e.message || 'Failed to connect to API.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = predictButtonHtml;
     }
-    
-    btn.innerHTML = `<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span><span>Generate AI Prediction</span>`;
 });
+
+function showPredictMessage(text) {
+    const message = document.getElementById('predict-message');
+    message.innerText = text;
+    message.classList.remove('hidden');
+}
+
+function formatApiError(result) {
+    if (Array.isArray(result.detail)) {
+        return result.detail.map((item) => {
+            const field = item.loc ? item.loc.slice(1).join('.') : 'input';
+            return `${field}: ${item.msg}`;
+        }).join(' | ');
+    }
+    return result.detail || result.error || 'Prediction failed.';
+}
 
 function updateShapBar(id, value) {
     const bar = document.getElementById(id + '-bar');
     const label = document.getElementById(id + '-val');
     if (!bar || !label) return;
     
-    const absVal = Math.abs(value);
+    const numericValue = Number(value);
+    if (!Number.isFinite(numericValue)) return;
+
+    const absVal = Math.abs(numericValue);
     const percentage = Math.min(absVal * 10, 50); // Scale for visibility
-    const sign = value >= 0 ? '+' : '-';
+    const sign = numericValue >= 0 ? '+' : '-';
     
     label.innerText = `${sign}${absVal.toFixed(2)} Q/ac`;
-    label.className = value >= 0 ? 'text-primary' : 'text-tertiary';
+    label.className = numericValue >= 0 ? 'text-primary' : 'text-tertiary';
     
-    if (value >= 0) {
+    if (numericValue >= 0) {
         bar.parentElement.className = 'h-10 w-full bg-surface-container-highest rounded-lg flex items-center';
         bar.className = `ml-[50%] h-full bg-gradient-to-r from-primary/40 to-primary rounded-r-lg flex items-center justify-end pr-3 transition-all duration-500`;
         bar.style.width = percentage + '%';
@@ -415,4 +446,5 @@ function updateShapBar(id, value) {
     }
 }
 </script>
+<script src="/static/js/app.js"></script>
 </body></html>

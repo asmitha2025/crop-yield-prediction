@@ -78,7 +78,7 @@ def train_all_models(
 
     Returns:
         Tuple of:
-          - trained_models: dict mapping model name → fitted estimator
+          - trained_models: dict mapping model name to fitted estimator
           - cv_results_df: DataFrame with CV mean/std for each metric
     """
     trained_models: Dict[str, Any] = {}
@@ -104,18 +104,18 @@ def train_all_models(
         cv_records.append(
             {
                 "Model": name,
-                "CV R² (mean)": np.mean(cv_scores["test_r2"]),
-                "CV R² (std)": np.std(cv_scores["test_r2"]),
+                "CV R2 (mean)": np.mean(cv_scores["test_r2"]),
+                "CV R2 (std)": np.std(cv_scores["test_r2"]),
                 "CV MAE (mean)": -np.mean(cv_scores["test_neg_mean_absolute_error"]),
                 "CV RMSE (mean)": np.sqrt(-np.mean(cv_scores["test_neg_mean_squared_error"])),
-                "Train R² (mean)": np.mean(cv_scores["train_r2"]),
+                "Train R2 (mean)": np.mean(cv_scores["train_r2"]),
             }
         )
         logger.info(
             "%s -> CV R2: %.4f +/- %.4f",
             name,
-            cv_records[-1]["CV R² (mean)"],
-            cv_records[-1]["CV R² (std)"],
+            cv_records[-1]["CV R2 (mean)"],
+            cv_records[-1]["CV R2 (std)"],
         )
 
     cv_df = pd.DataFrame(cv_records).set_index("Model")
@@ -123,5 +123,5 @@ def train_all_models(
 
 
 def get_best_model_name(cv_df: pd.DataFrame) -> str:
-    """Return the model name with the highest mean CV R² score."""
-    return cv_df["CV R² (mean)"].idxmax()
+    """Return the model name with the highest mean CV R2 score."""
+    return cv_df["CV R2 (mean)"].idxmax()
