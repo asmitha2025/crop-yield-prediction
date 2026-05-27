@@ -1,3 +1,12 @@
+---
+title: Crop Yield Prediction
+emoji: 🌾
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # Emerald Horizon: Controlled-Environment Crop Yield Intelligence
 
 Emerald Horizon is a state-of-the-art controlled-environment agriculture analytics platform. Designed as a recruiters' showcase, it blends high-fidelity machine learning pipeline engineering with an ultra-premium, dark-themed dashboard. 
